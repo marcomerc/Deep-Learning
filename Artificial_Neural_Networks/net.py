@@ -68,9 +68,68 @@ classifier.fit(X_train, y_train, batch_size=10, epochs=100)
 
 
 
+
+
+
 # Predicting the Test set results
 y_pred = classifier.predict(X_test)
-
+y_pred = (y_pred > 0.5) #change everything greater to 0.5 becomes 1 and else 0
 # Making the Confusion Matrix
 from sklearn.metrics import confusion_matrix
 cm = confusion_matrix(y_test, y_pred) 
+
+
+
+#k validation 
+from keras.wrappers.scikit_learn import KerasClassifier
+from sklearn.model_selection import cross_val_score
+# A function builds arequitecture of neural net 
+import keras 
+from keras.models import Sequential 
+from keras.layers import Dense
+def build_classifier():
+    import keras 
+    from keras.models import Sequential 
+    from keras.layers import Dense
+    classifier = Sequential()   #geting an object to initizeing the net
+    classifier.add(Dense(  activation='relu',input_dim=11, units= 6, kernel_initializer='uniform' )) # adding layers in hidden layer the average in the input and the output otherwise 11+1/2 we have to do cross validation
+    classifier.add(Dense(  activation='relu', units= 6, kernel_initializer='uniform' )) # adding layers in hidden layer the average in the input and the output otherwise 11+1/2 we have to do cross validation
+    classifier.add(Dense(  activation='sigmoid', units= 1, kernel_initializer='uniform' ))
+    classifier.compile(optimizer='adam',loss='binary_crossentropy', metrics=['accuracy']) # adam is stochastic gradient decent, then loss function
+    return classifier
+#return 10 accuaries
+classifier = KerasClassifier(build_fn = build_classifier, batch_size=10,  epochs=100)
+accuracies = cross_val_score(estimator =classifier,X =X_train,y = y_train, cv = 10,n_jobs = -1) #cv number of cross validation n_jobs the number of cpus that we use  - 1for all 
+mean = accuracies.mean() #computing the mean 
+variance = accuracies.std()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
