@@ -13,8 +13,8 @@ from keras.layers import Dense # it's for the neural network.
 #initializing the network
 classifier  = Sequential()
 
-
-
+#feature detecting it gets a metrix and gives you a feature map and detects a feature.
+classifier.add(Convolution2D())
 
 
 
