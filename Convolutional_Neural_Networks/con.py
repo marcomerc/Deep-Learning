@@ -31,6 +31,37 @@ classifier.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = [
 
 
 
+# re scaling them 
+from keras.preprocessing.image import ImageDataGenerator 
+
+
+#so that we generate more imamges from what we have and trian better we rescalel them and do zooms and stuff 
+train_datagen = ImageDataGenerator( 
+        rescale=1./255, # reducint value of each pizel 
+        shear_range=0.2,
+        zoom_range=0.2,
+        horizontal_flip=True)
+
+test_datagen = ImageDataGenerator(rescale=1./255)
+
+train_set = train_datagen.flow_from_directory('dataset/training_set',
+                                              target_size=(64, 64), # this is what the neural net will be expecting
+                                              batch_size=32,
+                                              class_mode='binary')
+
+test_set = test_datagen.flow_from_directory(
+                                            'dataset/test_set',
+                                            target_size=(64, 64),
+                                            batch_size=32,
+                                            class_mode='binary')
+
+classifier.fit_generator(
+                        train_set,
+                        steps_per_epoch=8000,
+                        epochs=25,
+                        validation_data=test_set,
+                        validation_steps=800)
+
 
 
 
