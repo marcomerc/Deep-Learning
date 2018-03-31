@@ -29,15 +29,42 @@ x_train, y_train = np.array(x_train), np.array(y_train)
 x_train =  np.reshape(x_train,(x_train.shape[0],x_train.shape[1], 1)) #batch size total days,  timsteps 60, inputsize #new indicator price of another stock that is dependent
 
 
+#building the rnna
+from keras.models import Sequential
+from keras.layers import Dense
+from keras.layers import LSTM
+from keras.layers import Dropout 
+
+#declaring the rnn
+regressor = Sequential()
+
+
+#adding LSTM
+regressor.add(LSTM(units =50,return_sequences = True, input_shape =  ( x_train.shape[1], 1 )) )# number of things inside, true if another layers will be added, the last two dimentions of xtrain
+#adding regressor.
+regressor.add(Dropout(0.2)) #drop of of the neurans 8 will be drop uout of 10. this is the regulization
+
+#second layer
+regressor.add(LSTM(units =50,return_sequences = True)) # no input shape only in the first
+regressor.add(Dropout(0.2)) #drop of of the neurans 8 will be drop uout of 10. this is the regulization
 
 
 
+# third layer
+regressor.add(LSTM(units =50,return_sequences = True ) )
+regressor.add(Dropout(0.2)) #drop of of the neurans 8 will be drop uout of 10. this is the regulization
 
+#four layer
+regressor.add(LSTM(units =50) )
+regressor.add(Dropout(0.2)) #drop of of the neurans 8 will be drop uout of 10. this is the regulization
 
+#final layer
+regressor.add(Dense(units = 1)) #uints =dimntion of the output
 
+#compile the net
+regressor.compile(optimizer = 'adam',loss = 'mean_squared_error')
 
-
-
+#making the predictions and visualizing the results 
 
 
 
