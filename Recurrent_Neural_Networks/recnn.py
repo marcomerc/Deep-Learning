@@ -64,16 +64,42 @@ regressor.add(Dense(units = 1)) #uints =dimntion of the output
 #compile the net
 regressor.compile(optimizer = 'adam',loss = 'mean_squared_error')
 
-#making the predictions and visualizing the results 
+# training it 
+regressor.fit(x_train,y_train, epochs = 100, batch_size=32 )
+
+#getting the real values 
+dataset_test = pd.read_csv('Google_Stock_Price_Test.csv')
+real_stock_price =  dataset_test.iloc[:,1:2].values
 
 
+#getting the predicted stock prices of january 2017
+#axis =0 for a verilital horizontal concat
+dataset_total = pd.concat((dataset_train['Open'], dataset_test['Open']), axis = 0) #colomns you want, concat the lines the result to the 
+inputs = dataset_total[len(dataset_total) -len(dataset_test) - 60: ].values #all the inputs of january 2017
+inputs = inputs.reshape(-1,1) # stock minus january 
+inputs = sc.transform(inputs)
+
+X_test = []
+for i in range(60,80):   # test has 20 days
+    X_test.append(inputs[i-60:i,0]) #zero colomn and 60 rows for each day 
+    
+X_test = np.array(X_test)
+X_test =  np.reshape(X_test,(X_test.shape[0],X_test.shape[1], 1)) #batch size total days,  timsteps 60, inputsize #new indicator price of another stock that is dependent
+
+predicted_stock_price = regressor.predict(X_test)
+#go back to non scaling the data
+predicted_stock_price = sc.inverse_transform(predicted_stock_price)
 
 
+#using the matplot to plot the data 
+plt.plot(real_stock_price, color = 'red', label = 'Real Google Stock Price' ) # data and label to it 
+plt.plot(predicted_stock_price, color = 'red', label = 'Real Google Stock Price' ) #data and label to it
+plt.title("google stock price prediction" ) # title 
+plt.xlabe('Time')
+plt.ylabe('google stock price')
+plt.legend() # to includ the legend in the char with no input 
+plt.show()
 
 
-
-
-
-
-
+## we can increased its accurary by changing the scoring method  to accuracy or neg_mean_squared_error
 
