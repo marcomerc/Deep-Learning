@@ -73,7 +73,7 @@ real_stock_price =  dataset_test.iloc[:,1:2].values
 
 
 #getting the predicted stock prices of january 2017
-#axis =0 for a verilital horizontal concat
+#axis =0 for a verilital horiszontal concat
 dataset_total = pd.concat((dataset_train['Open'], dataset_test['Open']), axis = 0) #colomns you want, concat the lines the result to the 
 inputs = dataset_total[len(dataset_total) -len(dataset_test) - 60: ].values #all the inputs of january 2017
 inputs = inputs.reshape(-1,1) # stock minus january 
@@ -99,7 +99,6 @@ plt.xlabe('Time')
 plt.ylabe('google stock price')
 plt.legend() # to includ the legend in the char with no input 
 plt.show()
-
 
 ## we can increased its accurary by changing the scoring method  to accuracy or neg_mean_squared_error
 
