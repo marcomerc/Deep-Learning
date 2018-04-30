@@ -91,6 +91,16 @@ classifier.fit(Customers, is_fraud, batch_size = 1, epochs = 2)
 # Part 3 - Making predictions and evaluating the model
 
 # Predicting the Test set results
-y_pred = classifier.predict(X_test)
-                
+y_pred = classifier.predict(Customers)
+y_pred = np.concatenate( (dataset.iloc[:,0:1],y_pred), axis =1 )#axis is vertical concattion
+
+y_pred = y_pred[y_pred[:,1].argsort()]
+
+
+
+
+
+
+
+
 
